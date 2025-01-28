@@ -38,41 +38,38 @@ except:
     # Display a warning if file upload fails
     st.warning("Upload files of type: jpg, png or jpeg")
 
-try:
-    if uploaded_img:
-        # Open the uploaded image and display it
-        image = Image.open(uploaded_img)
-        st.image(image, caption="Uploaded Image")
+if uploaded_img:
+    # Open the uploaded image and display it
+    image = Image.open(uploaded_img)
+    st.image(image, caption="Uploaded Image")
 
-        # Process the user's command to extract editing instructions
-        reply, edits = process_prompt(command)
+    # Process the user's command to extract editing instructions
+    reply, edits = process_prompt(command)
+    # st.write(edits) to check if the extracted dictionary is int he write format
         
 
-        # Process the image with the extracted edits
-        edited_img = process_img(image, edits)
+    # Process the image with the extracted edits
+    edited_img = process_img(image, edits)
 
-        if edits:
-            # Display the edited image after modifications
-            st.image(edited_img, caption="Edited image")
+    if edits:
+        # Display the edited image after modifications
+        st.image(edited_img, caption="Edited image")
 
-            # Convert the edited image to a byte stream for downloading
-            img_byte_arr = io.BytesIO()
-            edited_img.save(img_byte_arr, format="PNG")
-            img_byte_arr.seek(0)
+        # Convert the edited image to a byte stream for downloading
+        img_byte_arr = io.BytesIO()
+        edited_img.save(img_byte_arr, format="PNG")
+        img_byte_arr.seek(0)
 
-            # Allow the user to download the edited image
-            st.download_button(
-                label="Download Image",
-                data=img_byte_arr,
-                file_name="downloaded_image.jpg",
-                mime="image/jpeg"
-            )
+        # Allow the user to download the edited image
+        st.download_button(
+        label="Download Image",
+        data=img_byte_arr,
+        file_name="downloaded_image.jpg",
+        mime="image/jpeg"
+        )
 
-            # Display the reply text to inform the user about the edits
-            typing_animation(reply)
-        else:
-            # If no edits were applied, show the reply message
-            typing_animation(reply)
-except:
-    # Display a warning if an error occurs during image processing
-    st.warning("Error occurred. Please try again")
+        # Display the reply text to inform the user about the edits
+        typing_animation(reply)
+    else:
+        # If no edits were applied, show the reply message
+        typing_animation(reply)
