@@ -45,7 +45,7 @@ if uploaded_img:
 
     # Process the user's command to extract editing instructions
     reply, edits = process_prompt(command)
-    # st.write(edits) to check if the extracted dictionary is int he write format
+    # st.write(edits) to check if the extracted dictionary is in the right format
         
 
     # Process the image with the extracted edits
