@@ -6,7 +6,7 @@ from PIL import Image  # Importing the Python Imaging Library to handle image ma
 import time
 
 # Set up the Streamlit app's title
-st.title("AI Image Editor")
+st.title("AI-Powered Image Editor")
 
 #To get typing animation
 def typing_animation(text, speed=0.01):
