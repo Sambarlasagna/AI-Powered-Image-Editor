@@ -15,7 +15,7 @@ def process_img(image, edits):
                 x, y = [int(num) for num in re.findall(r'-?\d+', edits[edit])]
                 image = image.resize((x, y))
 
-            elif edit.lower() in ['rotate', 'turn', 'flip', 'angle']:
+            elif edit.lower() in ['rotate', 'turn', 'angle']:
                 # Rotate or flip the image based on the user's input
                 for edit in edits:
                     if isinstance(edits[edit], str):
@@ -26,17 +26,32 @@ def process_img(image, edits):
                     elif isinstance(edits[edit], int):
                         # If the value is already an integer, use it directly
                         angle = edits[edit]
-                        
+
                 image = image.rotate(angle)
 
             elif edit.lower() in ['blur', 'blurred']:
                 # Apply a blur filter to the image
                 image = image.filter(ImageFilter.GaussianBlur(radius=10))  
 
-            elif edit.lower() in ['text', 'write']:
+            elif edit.lower() in ['text', 'write',"add text", "Add text","add_text"]:
                 # Add text to the image at a specified position
                 draw = ImageDraw.Draw(image)
-                draw.text((10, 10), edits[edit], fill="white")
+                text = edits[edit]
+                try:
+                    font = ImageFont.truetype("DejaVuSans-Bold.ttf", 200)  # Adjust the font size and type here
+                except IOError:
+                    font = ImageFont.load_default()  # Fallback to default font if custom font is not found
+                # Get the bounding box of the text
+                bbox = draw.textbbox((0, 0), text,font)
+                text_width, text_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
+
+                # Position the text in the center (you can change this to any position you want)
+                width, height = image.size
+                position = ((width - text_width) // 2, (height - text_height) // 2)
+
+
+                # Add the text
+                draw.text(position, text, font = font,fill="white")
 
             elif edit.lower() in ['flip']:
                 # Flip the image either horizontally or vertically
