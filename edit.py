@@ -23,7 +23,7 @@ try:
 
             elif edit.lower() in ['blur', 'blurred']:
                 # Apply a blur filter to the image
-                image = image.filter(ImageFilter.BLUR)
+                image = image.filter(ImageFilter.GaussianBlur(radius=10))  
 
             elif edit.lower() in ['text', 'write']:
                 # Add text to the image at a specified position
