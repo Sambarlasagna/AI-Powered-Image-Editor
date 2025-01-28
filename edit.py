@@ -2,8 +2,8 @@
 from PIL import Image, ImageEnhance, ImageDraw, ImageFont, ImageFilter
 import re
 
-try:
-    def process_img(image, edits):
+
+def process_img(image, edits):
         # Iterate through all the edits specified by the user
         for edit in edits:
             if edit.lower() in ['grayscale']:
@@ -12,14 +12,22 @@ try:
 
             elif edit.lower() in ['resize', 'changesize', 'change size', 'size']:
                 # Resize the image based on the given dimensions
-                x, y = [int(num) for num in re.findall(r'\d+', edits[edit])]
+                x, y = [int(num) for num in re.findall(r'-?\d+', edits[edit])]
                 image = image.resize((x, y))
 
             elif edit.lower() in ['rotate', 'turn', 'flip', 'angle']:
                 # Rotate or flip the image based on the user's input
-                if isinstance(edits[edit], str):
-                    edits[edit] = [int(num) for num in re.findall(r'\d+', edits[edit])][0]
-                image = image.rotate(edits[edit])
+                for edit in edits:
+                    if isinstance(edits[edit], str):
+                        # If the value is a string, extract the number using regex
+                        numbers = re.findall(r'\d+', edits[edit])  # Extract all numbers
+                        if numbers:  # If there's a number found
+                            angle = int(numbers[0])  # Take the first number and convert to int
+                    elif isinstance(edits[edit], int):
+                        # If the value is already an integer, use it directly
+                        angle = edits[edit]
+                        
+                image = image.rotate(angle)
 
             elif edit.lower() in ['blur', 'blurred']:
                 # Apply a blur filter to the image
@@ -55,6 +63,6 @@ try:
         # For more options visit https://pillow.readthedocs.io/en/stable/index.html
 
         return image
-except:
-    # Display a warning if an error occurs during image processing
-    st.warning("Error occurred. Please try again")
+# except:
+#     Display a warning if an error occurs during image processing
+#     st.warning("Error occurred. Please try again")
